@@ -9,6 +9,9 @@ plugins {
 //	for JPA
 	kotlin("plugin.allopen") version "1.6.21"
 
+	//properties
+	kotlin("kapt") version "1.6.21"
+
 }
 
 //	for JPA
@@ -43,7 +46,17 @@ dependencies {
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	runtimeOnly("com.h2database:h2")
 	annotationProcessor("org.projectlombok:lombok")
-	testImplementation("org.springframework.boot:spring-boot-starter-test")
+	testImplementation("org.springframework.boot:spring-boot-starter-test") {
+		exclude(module = "junit")
+		exclude(module = "mockito-core")
+	}
+	testImplementation("org.junit.jupiter:junit-jupiter-api")
+	testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
+	testImplementation("com.ninja-squad:springmockk:3.0.1")
+
+//  configuration processing by IDE
+	kapt("org.springframework.boot:spring-boot-configuration-processor")
+
 }
 
 tasks.withType<KotlinCompile> {
@@ -56,3 +69,5 @@ tasks.withType<KotlinCompile> {
 tasks.withType<Test> {
 	useJUnitPlatform()
 }
+
+

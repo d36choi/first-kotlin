@@ -1,5 +1,6 @@
 package com.example.firstkotlin.controller
 
+import com.example.firstkotlin.configuration.BlogProperties
 import com.example.firstkotlin.entity.Article
 import com.example.firstkotlin.entity.User
 import com.example.firstkotlin.extension.format
@@ -13,13 +14,18 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.server.ResponseStatusException
 
 @Controller
-class HtmlController(private val repository: ArticleRepository) {
+class HtmlController(
+    private val repository: ArticleRepository,
+    private val properties: BlogProperties
+) {
 
     @GetMapping("/")
     fun blog(model: Model): String {
-        model["title"] = "Blog"
+        model["title"] = properties.title
+        model["banner"] = properties.banner
         model["articles"] = repository.findAllByOrderByAddedAtDesc().map { it.render() }
         return "blog"
+
     }
 
     @GetMapping("/article/{slug}")
